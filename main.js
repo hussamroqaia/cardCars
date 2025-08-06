@@ -1,9 +1,76 @@
 let cards = document.querySelector(".cards");
 let details = document.createElement("div");
-    details.classList.add("details");
-    document.querySelector(".container").appendChild(details);
+details.classList.add("details");
+document.querySelector(".container").appendChild(details);
 
 let cars = [];
+let localCars = JSON.parse(localStorage.getItem("cars"));
+if (localCars === null) {
+  localCars = cars = [];
+}
+cars = localCars;
+
+for (let i = 0; i < cars.length; i++) {
+  cards.innerHTML += `<div class="card  ${cars[i].name}">
+  <h4 class="cerato">${cars[i].name}</h4>
+  <p>Year:<span> ${cars[i].year}</span> </p>
+  <p>Color:<span> ${cars[i].color}</span> </p>
+  <p>Company:<span> ${cars[i].company}</span> </p>
+  <p>Founded:<span> ${cars[i].founded}</span> </p>
+  <button class="x" onclick="removeCard(this)">x</button></div>`;
+}
+function addEventLis() {
+  for (var i = 0; i < document.querySelectorAll(".card").length; i++) {
+    document
+      .querySelectorAll(".card")
+      [i].addEventListener("click", function () {
+        for (let i = 0; i < document.querySelectorAll(".card").length; i++) {
+          document.querySelectorAll(".card")[i].classList.remove("isSearched");
+        }
+
+        details.innerHTML = "";
+        // let a = i;
+        this.classList.add("isSearched");
+        // console.log(this);
+        // console.log(this.hasClass("cerato"));
+
+        if (this.classList.contains("cerato")) {
+          for (let car of cars) {
+            if (car.name === "cerato") {
+              let carLink = car.carLink;
+              details.innerHTML = `
+            <div class="img">
+            
+              <img src="${carLink}" alt="">
+              <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis sit
+    consequatur iste? At porro soluta unde nostrum perspiciatis eveniet sequi?
+    Eveniet error saepe nisi officia asperiores quo eligendi culpa dolorum?</div>
+            </div>
+            `;
+            }
+          }
+        } else if (this.classList.contains("rio")) {
+          for (let car of cars) {
+            if (car.name === "rio") {
+              let carLink = car.carLink;
+              details.innerHTML = `
+            <div class="img">
+            
+              <img src="${carLink}" alt="">
+              <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis sit
+    consequatur iste? At porro soluta unde nostrum perspiciatis eveniet sequi?
+    Eveniet error saepe nisi officia asperiores quo eligendi culpa dolorum?</div>
+            </div>
+            `;
+            }
+          }
+        }
+
+        //   console.log(5555);
+      });
+  }
+}
+addEventLis();
 
 document.getElementById("addCar").addEventListener("click", function () {
   cards.innerHTML = "";
@@ -23,13 +90,15 @@ document.getElementById("addCar").addEventListener("click", function () {
   }
   let newCar = { name, year, color, company, founded, carLink };
 
-  console.log(cars);
 
   if (!name || isNaN(year) || isNaN(founded) || !color || !company) {
     alert("Please enter valid input");
     return;
   }
   cars.push(newCar);
+
+  localStorage.setItem("cars", JSON.stringify(cars));
+
 
   for (let car of cars) {
     var card = document.createElement("div");
@@ -66,58 +135,7 @@ document.getElementById("addCar").addEventListener("click", function () {
     card.appendChild(carbutton);
 
     
-
-    for (var i = 0; i < document.querySelectorAll(".card").length; i++) {
-      document
-        .querySelectorAll(".card")
-        [i].addEventListener("click", function () {
-          for (let i = 0; i < document.querySelectorAll(".card").length; i++) {
-            document
-              .querySelectorAll(".card")
-              [i].classList.remove("isSearched");
-          }
-
-          details.innerHTML = "";
-          // let a = i;
-          this.classList.add("isSearched");
-          // console.log(this);
-          // console.log(this.hasClass("cerato"));
-
-          if (this.classList.contains("cerato")) {
-            for (let car of cars) {
-              if (car.name === "cerato") {
-                let carLink = car.carLink;
-                details.innerHTML = `
-            <div class="img">
-            
-              <img src="${carLink}" alt="">
-              <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis sit
-    consequatur iste? At porro soluta unde nostrum perspiciatis eveniet sequi?
-    Eveniet error saepe nisi officia asperiores quo eligendi culpa dolorum?</div>
-            </div>
-            `;
-              }
-            }
-          } else if (this.classList.contains("rio")) {
-            for (let car of cars) {
-              if (car.name === "rio") {
-                let carLink = car.carLink;
-                details.innerHTML = `
-            <div class="img">
-            
-              <img src="${carLink}" alt="">
-              <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis sit
-    consequatur iste? At porro soluta unde nostrum perspiciatis eveniet sequi?
-    Eveniet error saepe nisi officia asperiores quo eligendi culpa dolorum?</div>
-            </div>
-            `;
-              }
-            }
-          }
-
-          //   console.log(5555);
-        });
-    }
+    addEventLis();
   }
 });
 
@@ -125,23 +143,33 @@ let cardNumber;
 let search = document.getElementById("search");
 search.addEventListener("change", function () {
   for (let i = 0; i < cars.length; i++) {
-    document.querySelectorAll(".card")[i].classList.remove("isSearched");
 
     if (cars[i].name === search.value) {
       cardNumber = i;
     }
   }
-  let cardChosen = document.querySelectorAll(".card")[cardNumber];
   cards.innerHTML = "";
-  cards.appendChild(cardChosen);
+
+  cards.innerHTML = `<div class="card  ${cars[cardNumber].name}">
+  <h4 class="cerato">${cars[cardNumber].name}</h4>
+  <p>Year:<span> ${cars[cardNumber].year}</span> </p>
+  <p>Color:<span> ${cars[cardNumber].color}</span> </p>
+  <p>Company:<span> ${cars[cardNumber].company}</span> </p>
+  <p>Founded:<span> ${cars[cardNumber].founded}</span> </p>
+  <button class="x" onclick="removeCard(this)">x</button></div>`;
+
+  let cardChosen = document.querySelectorAll(".card")[0];
+  
 
   cardChosen.classList.add("isSearched");
+
+  
+  addEventLis();
 });
 
 let x = document.querySelector("x");
 function removeCard(button) {
   const card = button.parentElement;
-  console.log(card.classList[1]);
   cars = cars.filter((obj) => obj.name !== `${card.classList[1]}`);
 
   card.remove();
