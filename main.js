@@ -90,6 +90,7 @@ document.getElementById("addCar").addEventListener("click", function () {
   }
   let newCar = { name, year, color, company, founded, carLink };
 
+  // console.log(cars);
 
   if (!name || isNaN(year) || isNaN(founded) || !color || !company) {
     alert("Please enter valid input");
@@ -139,29 +140,34 @@ document.getElementById("addCar").addEventListener("click", function () {
   }
 });
 
-let cardNumber;
+let cardNumber = [];
 let search = document.getElementById("search");
 search.addEventListener("change", function () {
   for (let i = 0; i < cars.length; i++) {
 
     if (cars[i].name === search.value) {
-      cardNumber = i;
+      cardNumber.push(i);
     }
   }
   cards.innerHTML = "";
+  for (let i = 0; i < cardNumber.length; i++){
 
-  cards.innerHTML = `<div class="card  ${cars[cardNumber].name}">
-  <h4 class="cerato">${cars[cardNumber].name}</h4>
-  <p>Year:<span> ${cars[cardNumber].year}</span> </p>
-  <p>Color:<span> ${cars[cardNumber].color}</span> </p>
-  <p>Company:<span> ${cars[cardNumber].company}</span> </p>
-  <p>Founded:<span> ${cars[cardNumber].founded}</span> </p>
-  <button class="x" onclick="removeCard(this)">x</button></div>`;
 
-  let cardChosen = document.querySelectorAll(".card")[0];
+    cards.innerHTML += `<div class="card  ${cars[cardNumber[i]].name}">
+    <h4 class="cerato">${cars[cardNumber[i]].name}</h4>
+    <p>Year:<span> ${cars[cardNumber[i]].year}</span> </p>
+    <p>Color:<span> ${cars[cardNumber[i]].color}</span> </p>
+    <p>Company:<span> ${cars[cardNumber[i]].company}</span> </p>
+    <p>Founded:<span> ${cars[cardNumber[i]].founded}</span> </p>
+    <button class="x" onclick="removeCard(this)">x</button></div>`;
+  }
+  for (let i = 0; i < cardNumber.length; i++){
+
+    let cardChosen = document.querySelectorAll(".card")[i];
+    
   
-
-  cardChosen.classList.add("isSearched");
+    cardChosen.classList.add("isSearched");
+  }
 
   
   addEventLis();
